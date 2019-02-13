@@ -3,12 +3,14 @@
 
 using namespace std;
 
+// червоно-чорне дерево
 template <class T>
 class RedBlackTree {
 	// структура вузла
 	// value - значення
 	// p1,p2 - вказівники на ліве та праве піддерева
 	// red   - колір (true - якщо червоний)
+	// childCount - кількість нашадків вершини
 	struct Node {
 		Node *p1,*p2;
 		T& value;
@@ -61,7 +63,8 @@ class RedBlackTree {
 		if (!node) {
 			return;
 		}
-		node->childCount = (node->p1 ? node->p1->childCount + 1 : 0) + (node->p2 ? node->p2->childCount + 1 : 0);
+		node->childCount = (node->p1 ? node->p1->childCount + 1 : 0) + 
+			               (node->p2 ? node->p2->childCount + 1 : 0);
 	}
 	
 	// поворот вліво
@@ -364,8 +367,11 @@ class CompanyDivision {
 	}
 };
 
-// список підрозділів компанії
-vector <CompanyDivision> compDivs;
+// обмеження на кількість статистик, що знаходяться
+const int MAXK = 100000;
+
+vector <CompanyDivision> compDivs; // список підрозділів компанії
+int k, s[MAXK]; // кількість статистик та самі статистики
 
 // зчитування підрозділів компанії та їх працівників
 void readCompanyDivisions() {
@@ -385,15 +391,25 @@ void readCompanyDivisions() {
 	}
 }
 
+// зчитування статистик
+void readStatistics() {
+	cin >> k;
+	for (int i = 0; i < k; i++) {
+		cin >> s[i];
+	}
+}
+
 // тестування 
 int main() {
 	readCompanyDivisions();
+	readStatistics();
 	RedBlackTree <CompanyDivision> rbt;
 	for (auto& c : compDivs) {
 		rbt.insert(c);
 	}
 	rbt.show();
-	cout << "Third statistic = " << (string)rbt.statistic(3) << endl;
-	cout << "Fifth statistic = " << (string)rbt.statistic(5) << endl;
+	for (int i = 0; i < k; i++) {
+		cout << "Statistic N" << s[i] << " = " << (string)rbt.statistic(s[i]) << endl;
+	}
 }
 

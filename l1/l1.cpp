@@ -5,20 +5,20 @@ using namespace std;
 
 typedef unsigned int uint;
 
-// в назвах підрозділів та іменах працівників
-// дозволені лише маленькі літери латинського
-// алфавіту та цифри
+// Гў Г­Г Г§ГўГ Гµ ГЇВіГ¤Г°Г®Г§Г¤ВіГ«ВіГў ГІГ  ВіГ¬ГҐГ­Г Гµ ГЇГ°Г Г¶ВіГўГ­ГЁГЄВіГў
+// Г¤Г®Г§ГўГ®Г«ГҐГ­Ві Г«ГЁГёГҐ Г¬Г Г«ГҐГ­ГјГЄВі Г«ВіГІГҐГ°ГЁ Г«Г ГІГЁГ­Г±ГјГЄГ®ГЈГ®
+// Г Г«ГґГ ГўВіГІГі ГІГ  Г¶ГЁГґГ°ГЁ
 const int PRIME = 41,
  		  DIV_SIZE = 15,
 		  EMP_SIZE = 30;
 
-// підрозділ компанії
+// ГЇВіГ¤Г°Г®Г§Г¤ВіГ« ГЄГ®Г¬ГЇГ Г­ВіВї
 struct CompanyDivision {
 	string name;
 	vector <string> employees;
 };
 
-// функція для обчислення числового представлення рядка
+// ГґГіГ­ГЄГ¶ВіГї Г¤Г«Гї Г®ГЎГ·ГЁГ±Г«ГҐГ­Г­Гї Г·ГЁГ±Г«Г®ГўГ®ГЈГ® ГЇГ°ГҐГ¤Г±ГІГ ГўГ«ГҐГ­Г­Гї Г°ГїГ¤ГЄГ 
 uint hashCode(string s) {
 	uint hc = 0, pow = 1;
 	for (int i = 0; i < s.size(); i++) {
@@ -28,10 +28,10 @@ uint hashCode(string s) {
 	return hc;
 }
 
-// список підрозділів компанії
+// Г±ГЇГЁГ±Г®ГЄ ГЇВіГ¤Г°Г®Г§Г¤ВіГ«ВіГў ГЄГ®Г¬ГЇГ Г­ВіВї
 vector <CompanyDivision> compDivs;
-// масиви списків, де індексом в масиві є хеш
-// в одному списку зберігаються елементи з однаковим хешем 
+// Г¬Г Г±ГЁГўГЁ Г±ГЇГЁГ±ГЄВіГў, Г¤ГҐ ВіГ­Г¤ГҐГЄГ±Г®Г¬ Гў Г¬Г Г±ГЁГўВі Вє ГµГҐГё
+// Гў Г®Г¤Г­Г®Г¬Гі Г±ГЇГЁГ±ГЄГі Г§ГЎГҐГ°ВіГЈГ ГѕГІГјГ±Гї ГҐГ«ГҐГ¬ГҐГ­ГІГЁ Г§ Г®Г¤Г­Г ГЄГ®ГўГЁГ¬ ГµГҐГёГҐГ¬ 
 vector <string> compDivH[DIV_SIZE], empH[EMP_SIZE], empDivH[EMP_SIZE];
 
 void read() {
@@ -51,8 +51,8 @@ void read() {
 	}
 }
 
-// обчислення хешів для назв підрозділів,
-// імен працівників та пар <працівник><підрозділ>
+// Г®ГЎГ·ГЁГ±Г«ГҐГ­Г­Гї ГµГҐГёВіГў Г¤Г«Гї Г­Г Г§Гў ГЇВіГ¤Г°Г®Г§Г¤ВіГ«ВіГў,
+// ВіГ¬ГҐГ­ ГЇГ°Г Г¶ВіГўГ­ГЁГЄВіГў ГІГ  ГЇГ Г° <ГЇГ°Г Г¶ВіГўГ­ГЁГЄ><ГЇВіГ¤Г°Г®Г§Г¤ВіГ«>
 void makeHash() {
 	for (auto compDiv: compDivs) {
 		int dhc = hashCode(compDiv.name) % DIV_SIZE;
@@ -67,7 +67,7 @@ void makeHash() {
 	}
 }
 
-// виведення обчислених хешів
+// ГўГЁГўГҐГ¤ГҐГ­Г­Гї Г®ГЎГ·ГЁГ±Г«ГҐГ­ГЁГµ ГµГҐГёВіГў
 void showHashStructure() {
 	cout << "Company divisions structure:" << endl;
 	cout << "{hash | are elements}: {[company divisions]}" << endl;
@@ -166,6 +166,23 @@ void runRequestInterface() {
 				if (!empDivH[edhc].empty()) {
 					for (auto ed: empDivH[edhc]) {
 						if (ed == reqED) {
+							int dhc = hashCode(reqDiv) % DIV_SIZE;
+							bool flag2 = false;
+							for (auto div: compDivH[dhc]) {
+								if (div == reqDiv) {
+									flag2 = true;
+									break;
+								}
+							}
+							if (!flag2) continue;
+							flag2 = false;
+							int ehc = hashCode(reqEmp) % EMP_SIZE;
+							for (auto emp: empH[ehc]) {
+								if (emp == reqEmp) {
+									flag2 = true;
+									break;
+								}
+							}
 							cout << "Yes" << endl;
 							flag = true;
 							break;
